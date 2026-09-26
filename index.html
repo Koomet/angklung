@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#2b1810">
+<title>Virtual Angklung — Interaktif</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ======================================================
+       OVERLAY PEMBUKA AUDIO
+       Wajib ada karena browser (terutama mobile) memblokir
+       AudioContext sampai ada interaksi user (gesture).
+  ======================================================= -->
+  <div id="startOverlay" class="start-overlay">
+    <div class="start-card">
+      <div class="start-icon" aria-hidden="true">🎋</div>
+      <h1 class="start-title">Virtual Angklung</h1>
+      <p class="start-desc">Alat musik bambu tradisional Indonesia, kini di ujung jarimu.</p>
+      <button id="startBtn" class="btn-wood" type="button">Mulai Permainan (Aktifkan Audio)</button>
+      <p id="startStatus" class="start-status">Menekan tombol untuk memuat sampel suara…</p>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       HEADER + NAVIGASI MODE
+  ======================================================= -->
+  <header class="app-header">
+    <h1 class="app-title"><span aria-hidden="true">🎋</span> Virtual Angklung</h1>
+    <nav class="mode-switch" role="tablist" aria-label="Pilih mode permainan">
+      <button class="mode-btn active" data-mode="solo" role="tab" aria-selected="true" id="tabSolo">
+        Single Angklung
+      </button>
+      <button class="mode-btn" data-mode="ensemble" role="tab" aria-selected="false" id="tabEnsemble">
+        Piano / Ensemble
+      </button>
+    </nav>
+  </header>
+
+  <main id="app">
+
+    <!-- ============ MODE 1 : SINGLE ANGKLUNG (SOLO) ============ -->
+    <section id="soloMode" class="mode-panel active" role="tabpanel" aria-labelledby="tabSolo">
+
+      <div class="note-selector" id="noteSelector" role="listbox" aria-label="Pilih nada">
+        <!-- pill nada C4..C5 di-generate lewat JS -->
+      </div>
+
+      <div class="solo-stage">
+        <div class="angklung-instrument" id="angklungSolo" tabindex="0" role="button"
+             aria-label="Mainkan angklung">
+          <div class="rattan-tie rattan-top"></div>
+          <div class="bamboo-frame">
+            <div class="tube tube-big">
+              <span class="tube-shine"></span>
+            </div>
+            <div class="tube tube-small">
+              <span class="tube-shine"></span>
+            </div>
+          </div>
+          <div class="rattan-tie rattan-bottom"></div>
+          <div class="wood-base">
+            <div class="wood-grain"></div>
+          </div>
+        </div>
+        <p class="solo-current-note">Nada aktif: <span id="soloNoteLabel">C4</span></p>
+        <p class="solo-hint">Tekan &amp; tahan angklung, atau tekan tombol keyboard <kbd>A</kbd>–<kbd>K</kbd></p>
+      </div>
+
+      <div class="shake-control">
+        <label class="switch" for="shakeToggle">
+          <input type="checkbox" id="shakeToggle">
+          <span class="slider"></span>
+        </label>
+        <label for="shakeToggle" id="shakeLabel" class="shake-label">Aktifkan Goyang HP (Shake to Play)</label>
+      </div>
+      <p id="shakeStatus" class="shake-status"></p>
+    </section>
+
+    <!-- ============ MODE 2 : ENSEMBLE / PIANO ============ -->
+    <section id="ensembleMode" class="mode-panel" role="tabpanel" aria-labelledby="tabEnsemble">
+      <p class="ensemble-hint">Geser untuk melihat semua tabung. Sentuh lebih dari satu tabung sekaligus untuk membuat akor.</p>
+      <div class="ensemble-rack" id="ensembleRack" role="listbox" aria-label="Deretan tabung angklung">
+        <!-- tabung angklung C4..C5 di-generate lewat JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>Sampel suara angklung Bandung oleh <strong>Parking&nbsp;Sun</strong> (freesound.org) — lisensi CC BY 3.0</p>
+  </footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,535 @@
+/* =====================================================================
+   VIRTUAL ANGKLUNG — style.css
+   Tema: Skeuomorphism Bambu & Kayu
+   Mobile-first, responsive ke desktop.
+   ===================================================================== */
+
+/* ---------- 1. DESIGN TOKENS ---------- */
+:root {
+  /* Kayu (frame / background) */
+  --wood-darkest: #1a0f08;
+  --wood-dark:    #2b1810;
+  --wood-mid:     #4a2f1c;
+  --wood-light:   #6b4426;
+
+  /* Bambu (tabung) */
+  --bamboo-shadow: #6b431f;
+  --bamboo-dark:   #8a5a2b;
+  --bamboo-mid:    #c9963f;
+  --bamboo-light:  #e8c07d;
+  --bamboo-shine:  #f6dfa8;
+
+  /* Rotan / tali pengikat */
+  --rattan-dark: #3a2412;
+  --rattan-mid:  #5c3a21;
+
+  /* Aksen & teks */
+  --cream:        #f5e6c8;
+  --cream-dim:    #d8c39c;
+  --accent:       #ffb347;
+  --accent-glow:  rgba(255, 179, 71, 0.65);
+  --danger-none:  transparent;
+
+  /* Bayangan */
+  --shadow-deep:  rgba(0, 0, 0, 0.65);
+  --shadow-soft:  rgba(0, 0, 0, 0.35);
+  --highlight:    rgba(255, 255, 255, 0.18);
+
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --font-display: 'Yeseva One', serif;
+  --font-body: 'Nunito', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overscroll-behavior: none;
+  /* Mencegah gesture zoom/selek teks saat main di HP */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--cream);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  /* Latar kayu gelap bertekstur menggunakan gradient berlapis */
+  background-color: var(--wood-darkest);
+  background-image:
+    repeating-linear-gradient(
+      100deg,
+      rgba(0, 0, 0, 0.12) 0px,
+      rgba(0, 0, 0, 0.12) 2px,
+      transparent 2px,
+      transparent 7px
+    ),
+    radial-gradient(ellipse at top, var(--wood-mid) 0%, var(--wood-dark) 55%, var(--wood-darkest) 100%);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+kbd {
+  background: var(--wood-light);
+  border: 1px solid var(--rattan-mid);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: var(--font-body);
+  font-size: 0.85em;
+  box-shadow: 0 2px 0 var(--shadow-deep);
+}
+
+/* ---------- 2. OVERLAY PEMBUKA AUDIO ---------- */
+.start-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at center, var(--wood-mid) 0%, var(--wood-darkest) 100%);
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+.start-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.start-card {
+  text-align: center;
+  max-width: 360px;
+  padding: 36px 28px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, var(--wood-light), var(--wood-dark));
+  box-shadow:
+    0 20px 40px var(--shadow-deep),
+    inset 0 2px 0 var(--highlight),
+    inset 0 -6px 12px var(--shadow-deep);
+  border: 1px solid var(--rattan-dark);
+}
+.start-icon { font-size: 3rem; margin-bottom: 4px; }
+.start-title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  margin: 4px 0 10px;
+  color: var(--bamboo-shine);
+  text-shadow: 0 2px 4px var(--shadow-deep);
+}
+.start-desc { color: var(--cream-dim); margin: 0 0 22px; line-height: 1.5; }
+.start-status { margin-top: 14px; font-size: 0.85rem; color: var(--cream-dim); min-height: 1.2em; }
+
+/* Tombol gaya "kayu ditekan" dipakai ulang di beberapa tempat */
+.btn-wood {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--wood-darkest);
+  border: none;
+  cursor: pointer;
+  padding: 16px 28px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--bamboo-shine), var(--bamboo-mid) 55%, var(--bamboo-dark));
+  box-shadow:
+    0 6px 0 var(--bamboo-shadow),
+    0 10px 18px var(--shadow-deep),
+    inset 0 1px 0 var(--highlight);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.btn-wood:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 2px 0 var(--bamboo-shadow),
+    inset 0 4px 10px var(--shadow-deep);
+}
+
+/* ---------- 3. HEADER & NAVIGASI MODE ---------- */
+.app-header {
+  padding: 18px 16px 10px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.app-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  margin: 0 0 14px;
+  color: var(--bamboo-shine);
+  text-shadow: 0 2px 3px var(--shadow-deep);
+}
+
+.mode-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--wood-darkest), var(--wood-dark));
+  box-shadow: inset 0 3px 8px var(--shadow-deep), inset 0 -1px 0 var(--highlight);
+}
+.mode-btn {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.82rem;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--cream-dim);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  white-space: nowrap;
+}
+.mode-btn.active {
+  color: var(--wood-darkest);
+  background: linear-gradient(180deg, var(--bamboo-shine), var(--bamboo-mid));
+  box-shadow: 0 3px 0 var(--bamboo-shadow), 0 4px 10px var(--shadow-deep);
+}
+
+/* ---------- 4. LAYOUT UTAMA ---------- */
+#app {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 12px 24px;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.mode-panel {
+  display: none;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 0.25s ease;
+}
+.mode-panel.active { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 5. PEMILIH NADA (PILL SELECTOR) — MODE SOLO ---------- */
+.note-selector {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 8px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--wood-dark), var(--wood-darkest));
+  box-shadow: inset 0 3px 8px var(--shadow-deep);
+}
+.note-pill {
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 9px 14px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--cream-dim);
+  background: linear-gradient(180deg, var(--wood-light), var(--wood-mid));
+  box-shadow: 0 3px 0 var(--wood-darkest), inset 0 1px 0 var(--highlight);
+  transition: all 0.15s ease;
+}
+.note-pill.selected {
+  color: var(--wood-darkest);
+  background: linear-gradient(180deg, var(--bamboo-shine), var(--bamboo-mid));
+  box-shadow: 0 3px 0 var(--bamboo-shadow), 0 0 14px var(--accent-glow);
+  transform: translateY(-1px);
+}
+
+/* ---------- 6. INSTRUMEN ANGKLUNG BESAR — MODE SOLO ---------- */
+.solo-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px 4px;
+}
+
+.angklung-instrument {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.angklung-instrument:focus-visible .bamboo-frame {
+  box-shadow: 0 0 0 3px var(--accent), 0 14px 26px var(--shadow-deep);
+}
+
+.rattan-tie {
+  width: 86px;
+  height: 12px;
+  background: repeating-linear-gradient(
+    -35deg,
+    var(--rattan-mid) 0 4px,
+    var(--rattan-dark) 4px 8px
+  );
+  border-radius: 6px;
+  box-shadow: 0 2px 3px var(--shadow-soft);
+  z-index: 2;
+}
+.rattan-top { margin-bottom: -4px; }
+.rattan-bottom { margin-top: -6px; }
+
+.bamboo-frame {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 6px 18px 0;
+  background: linear-gradient(180deg, var(--wood-mid), var(--wood-dark));
+  border-radius: 16px 16px 6px 6px;
+  box-shadow:
+    0 16px 28px var(--shadow-deep),
+    inset 0 2px 0 var(--highlight);
+}
+
+/* Tabung bambu — dipakai untuk mode Solo & Ensemble */
+.tube {
+  position: relative;
+  border-radius: 40% 40% 12px 12px / 16px 16px 8px 8px;
+  background:
+    linear-gradient(90deg,
+      var(--bamboo-shadow) 0%,
+      var(--bamboo-light) 18%,
+      var(--bamboo-mid) 45%,
+      var(--bamboo-light) 75%,
+      var(--bamboo-shadow) 100%
+    );
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px 22px,
+      rgba(0,0,0,0.28) 22px 25px
+    ),
+    linear-gradient(90deg,
+      var(--bamboo-shadow) 0%,
+      var(--bamboo-light) 18%,
+      var(--bamboo-mid) 45%,
+      var(--bamboo-light) 75%,
+      var(--bamboo-shadow) 100%
+    );
+  box-shadow:
+    inset -6px 0 10px rgba(0,0,0,0.35),
+    inset 6px 0 10px rgba(255,255,255,0.12),
+    0 10px 16px var(--shadow-deep);
+  transition: filter 0.1s ease;
+  transform-origin: bottom center;
+}
+.tube-shine {
+  position: absolute;
+  top: 8%;
+  left: 14%;
+  width: 18%;
+  height: 78%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent 70%);
+  border-radius: 50%;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.tube-big   { width: 58px; height: 190px; }
+.tube-small { width: 38px; height: 130px; }
+
+.wood-base {
+  width: 130px;
+  height: 16px;
+  margin-top: 4px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--wood-light), var(--wood-darkest));
+  box-shadow: 0 6px 10px var(--shadow-deep), inset 0 1px 0 var(--highlight);
+  position: relative;
+  overflow: hidden;
+}
+.wood-grain {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, rgba(0,0,0,0.15) 0 2px, transparent 2px 10px);
+}
+
+/* Animasi getar saat nada dimainkan */
+@keyframes shakeTube {
+  0%, 100% { transform: rotate(0deg) translateX(0); }
+  20%      { transform: rotate(-3deg) translateX(-3px); }
+  50%      { transform: rotate(3deg) translateX(3px); }
+  80%      { transform: rotate(-2deg) translateX(-2px); }
+}
+.angklung-instrument.playing .tube,
+.ensemble-tube.playing .tube-inner {
+  animation: shakeTube 0.18s ease-in-out infinite;
+}
+.angklung-instrument.playing .tube {
+  filter: brightness(1.18) saturate(1.1);
+  box-shadow:
+    inset -6px 0 10px rgba(0,0,0,0.35),
+    inset 6px 0 10px rgba(255,255,255,0.2),
+    0 0 22px var(--accent-glow),
+    0 10px 16px var(--shadow-deep);
+}
+
+.solo-current-note {
+  margin: 18px 0 4px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--accent);
+}
+#soloNoteLabel { letter-spacing: 1px; }
+.solo-hint { font-size: 0.78rem; color: var(--cream-dim); text-align: center; margin: 0; }
+
+/* ---------- 7. TOGGLE "GOYANG HP" (SKEUOMORPHIC SWITCH) ---------- */
+.shake-control {
+  margin-top: 26px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.switch { position: relative; display: inline-block; width: 54px; height: 30px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: linear-gradient(180deg, var(--wood-darkest), var(--wood-mid));
+  border-radius: 999px;
+  box-shadow: inset 0 3px 6px var(--shadow-deep);
+  transition: background 0.2s ease;
+}
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 24px; height: 24px;
+  left: 3px; top: 3px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--bamboo-shine), var(--bamboo-dark));
+  box-shadow: 0 3px 4px var(--shadow-deep);
+  transition: transform 0.2s ease;
+}
+.switch input:checked + .slider {
+  background: linear-gradient(180deg, var(--wood-mid), var(--bamboo-shadow));
+  box-shadow: inset 0 3px 6px var(--shadow-deep), 0 0 10px var(--accent-glow);
+}
+.switch input:checked + .slider::before { transform: translateX(24px); }
+.shake-label { font-size: 0.88rem; color: var(--cream-dim); cursor: pointer; }
+.shake-status { font-size: 0.78rem; color: var(--accent); min-height: 1.1em; margin-top: 6px; }
+
+/* ---------- 8. MODE ENSEMBLE / PIANO ---------- */
+.ensemble-hint {
+  font-size: 0.8rem;
+  color: var(--cream-dim);
+  text-align: center;
+  margin: 0 0 14px;
+  padding: 0 12px;
+}
+
+.ensemble-rack {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+  padding: 20px 16px 16px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, var(--wood-mid), var(--wood-darkest));
+  box-shadow: inset 0 4px 10px var(--shadow-deep), inset 0 -2px 0 var(--highlight);
+  -webkit-overflow-scrolling: touch;
+}
+.ensemble-rack::-webkit-scrollbar { height: 6px; }
+.ensemble-rack::-webkit-scrollbar-thumb { background: var(--rattan-mid); border-radius: 4px; }
+
+.ensemble-tube {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  scroll-snap-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.ensemble-tube .tube-inner {
+  width: 40px;
+  transition: filter 0.08s ease, transform 0.08s ease;
+}
+/* Tabung makin tinggi & besar untuk nada makin rendah, meniru bentuk asli */
+.ensemble-tube[data-index="0"] .tube-inner { height: 190px; width: 46px; }
+.ensemble-tube[data-index="1"] .tube-inner { height: 176px; width: 44px; }
+.ensemble-tube[data-index="2"] .tube-inner { height: 162px; width: 42px; }
+.ensemble-tube[data-index="3"] .tube-inner { height: 150px; width: 40px; }
+.ensemble-tube[data-index="4"] .tube-inner { height: 138px; width: 38px; }
+.ensemble-tube[data-index="5"] .tube-inner { height: 126px; width: 36px; }
+.ensemble-tube[data-index="6"] .tube-inner { height: 116px; width: 34px; }
+.ensemble-tube[data-index="7"] .tube-inner { height: 106px; width: 32px; }
+
+.ensemble-tube.playing .tube-inner {
+  filter: brightness(1.2) saturate(1.15);
+  box-shadow:
+    inset -6px 0 10px rgba(0,0,0,0.35),
+    inset 6px 0 10px rgba(255,255,255,0.2),
+    0 0 18px var(--accent-glow);
+}
+.ensemble-tube.playing { transform: translateY(2px); }
+
+.ensemble-label {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cream-dim);
+  text-align: center;
+}
+.ensemble-label .key-hint {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--accent);
+  margin-top: 2px;
+}
+
+/* ---------- 9. FOOTER ---------- */
+.app-footer {
+  text-align: center;
+  font-size: 0.68rem;
+  color: var(--cream-dim);
+  opacity: 0.7;
+  padding: 6px 12px 14px;
+}
+
+/* ---------- 10. RESPONSIVE — TABLET / DESKTOP ---------- */
+@media (min-width: 640px) {
+  .app-title { font-size: 1.9rem; }
+  .tube-big   { width: 74px; height: 240px; }
+  .tube-small { width: 48px; height: 168px; }
+  .wood-base  { width: 160px; }
+  .note-pill  { font-size: 0.95rem; padding: 11px 18px; }
+
+  .ensemble-tube[data-index="0"] .tube-inner { height: 230px; width: 56px; }
+  .ensemble-tube[data-index="1"] .tube-inner { height: 212px; width: 53px; }
+  .ensemble-tube[data-index="2"] .tube-inner { height: 195px; width: 50px; }
+  .ensemble-tube[data-index="3"] .tube-inner { height: 180px; width: 47px; }
+  .ensemble-tube[data-index="4"] .tube-inner { height: 166px; width: 44px; }
+  .ensemble-tube[data-index="5"] .tube-inner { height: 152px; width: 41px; }
+  .ensemble-tube[data-index="6"] .tube-inner { height: 140px; width: 38px; }
+  .ensemble-tube[data-index="7"] .tube-inner { height: 128px; width: 35px; }
+
+  .ensemble-rack { justify-content: center; overflow-x: visible; gap: 16px; }
+}
+
+/* Hormati preferensi reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .angklung-instrument.playing .tube,
+  .ensemble-tube.playing .tube-inner {
+    animation: none;
+  }
+}
