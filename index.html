@@ -1,3 +1,6 @@
+
+
+Index · HTML
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -11,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-
+ 
   <!-- ======================================================
        OVERLAY PEMBUKA AUDIO
        Wajib ada karena browser (terutama mobile) memblokir
@@ -26,7 +29,7 @@
       <p id="startStatus" class="start-status">Menekan tombol untuk memuat sampel suara…</p>
     </div>
   </div>
-
+ 
   <!-- ======================================================
        HEADER + NAVIGASI MODE
   ======================================================= -->
@@ -41,16 +44,16 @@
       </button>
     </nav>
   </header>
-
+ 
   <main id="app">
-
+ 
     <!-- ============ MODE 1 : SINGLE ANGKLUNG (SOLO) ============ -->
     <section id="soloMode" class="mode-panel active" role="tabpanel" aria-labelledby="tabSolo">
-
+ 
       <div class="note-selector" id="noteSelector" role="listbox" aria-label="Pilih nada">
         <!-- pill nada C4..C5 di-generate lewat JS -->
       </div>
-
+ 
       <div class="solo-stage">
         <div class="angklung-instrument" id="angklungSolo" tabindex="0" role="button"
              aria-label="Mainkan angklung">
@@ -71,7 +74,7 @@
         <p class="solo-current-note">Nada aktif: <span id="soloNoteLabel">C4</span></p>
         <p class="solo-hint">Tekan &amp; tahan angklung, atau tekan tombol keyboard <kbd>A</kbd>–<kbd>K</kbd></p>
       </div>
-
+ 
       <div class="shake-control">
         <label class="switch" for="shakeToggle">
           <input type="checkbox" id="shakeToggle">
@@ -81,21 +84,39 @@
       </div>
       <p id="shakeStatus" class="shake-status"></p>
     </section>
-
+ 
     <!-- ============ MODE 2 : ENSEMBLE / PIANO ============ -->
     <section id="ensembleMode" class="mode-panel" role="tabpanel" aria-labelledby="tabEnsemble">
       <p class="ensemble-hint">Geser untuk melihat semua tabung. Sentuh lebih dari satu tabung sekaligus untuk membuat akor.</p>
-      <div class="ensemble-rack" id="ensembleRack" role="listbox" aria-label="Deretan tabung angklung">
-        <!-- tabung angklung C4..C5 di-generate lewat JS -->
+ 
+      <!-- Muncul otomatis di HP saat orientasi masih portrait (diatur via CSS media query) -->
+      <p class="landscape-hint" id="landscapeHint">
+        <span aria-hidden="true">📱↻</span> Miringkan layar HP (Landscape) untuk pengalaman bermain yang lebih luas
+      </p>
+ 
+      <!-- Kontrol Octave Shift: menggeser tampilan rak antar oktaf (C4–C5 / C5–C6) -->
+      <div class="octave-controls">
+        <button id="octaveDown" class="btn-octave" type="button" aria-label="Geser ke oktaf lebih rendah">
+          <span aria-hidden="true">−</span> Octave
+        </button>
+        <span id="octaveRangeLabel" class="octave-range-label">C4 – C5</span>
+        <button id="octaveUp" class="btn-octave" type="button" aria-label="Geser ke oktaf lebih tinggi">
+          <span aria-hidden="true">+</span> Octave
+        </button>
+      </div>
+ 
+      <div class="ensemble-rack" id="ensembleRack" role="listbox" aria-label="Deretan tabung angklung 2 oktaf">
+        <!-- tabung angklung C4..C6 (2 oktaf) di-generate lewat JS -->
       </div>
     </section>
-
+ 
   </main>
-
+ 
   <footer class="app-footer">
     <p>Sampel suara angklung Bandung oleh <strong>Parking&nbsp;Sun</strong> (freesound.org) — lisensi CC BY 3.0</p>
   </footer>
-
+ 
 <script src="app.js"></script>
 </body>
 </html>
+ 
